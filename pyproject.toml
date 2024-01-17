@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "vectorsearch-benchmark"
+version = "0.1.0"
+description = ""
+authors = ["pvannies <paulinevannies@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+weaviate-client = "^3.26.1"
+pytrec-eval-terrier = "^0.5.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
