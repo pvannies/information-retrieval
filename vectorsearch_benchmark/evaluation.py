@@ -1,19 +1,22 @@
 import pytrec_eval
 import logging
 import json
+import os
+from datetime import datetime
+
 from weaviate import Client
 from typing import List, Dict, Tuple
-from ingestion import connect_to_client
+from ingestion import connect_to_client, DATASET_NAME, WEAVIATE_CLASS_NAME, WEAVIATE_URL
 from data_loader import GenericDataLoader
-from datetime import datetime
+
 
 logger = logging.getLogger(__name__)
 
-WEAVIATE_URL = "http://localhost:8080"
-WEAVIATE_CLASS_NAME = "Document"
+# What other properties could be interesting to alter?
 ALPHA = 1
 BM25_PROPERTIES = ["text"]
 EMBEDDING_MODEL = 'multilingual-e5-small'
+LIMIT_RESULTS = 10
 
 
 # https://weaviate.io/developers/weaviate/search/hybrid
@@ -40,7 +43,7 @@ def query_and_retrieve_results(
         )
         .with_hybrid(query=query, properties=properties, alpha=alpha)
         .with_additional(["score"])
-        .with_limit(limit)
+        .with_limit(LIMIT_RESULTS)
         .do()
     )
     list_answers = answer["data"]["Get"][WEAVIATE_CLASS_NAME]
@@ -128,7 +131,7 @@ def evaluate(qrels: Dict[str, Dict[str, int]],
 if __name__ == "__main__":
     # assumption: data is already in weaviate vector database
     client = connect_to_client(WEAVIATE_URL)
-    data_path = "./datasets/scifact"
+    data_path = f"./datasets/{DATASET_NAME}"
     dataset = data_path.split('/')[-1]
     _, queries, qrels = GenericDataLoader(data_path).load(split="test")  # or split = "train" or "dev"
     results = get_results_dataset(client, queries)
@@ -146,7 +149,7 @@ if __name__ == "__main__":
 
     date = datetime.now().strftime('%d-%m-%Y-%H%M')
     filename = f"evaluation_metrics_{dataset}_{EMBEDDING_MODEL}_alpha={ALPHA}.json"
-    with open(filename, 'w') as myfile:
+    with open(os.path.join('output',filename), 'w') as myfile:
         json.dump(info_dict, myfile, indent=4)
 
 

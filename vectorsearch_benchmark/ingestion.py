@@ -3,6 +3,7 @@ from data_loader import GenericDataLoader
 
 WEAVIATE_URL = "http://localhost:8080"
 WEAVIATE_CLASS_NAME = "Document"
+DATASET_NAME = 'scifact'
 TEXT = "text"
 
 # https://weaviate.io/developers/weaviate/modules/retriever-vectorizer-modules
@@ -56,7 +57,7 @@ def create_schema(client: Client):
             {"vectorizeClassName": False}
     }
 
-    client.schema.create_class(schema)
+    client.schema.create('schema.json')
 
 
 def ingest_data(client: Client, dataset_name: str):
@@ -92,4 +93,5 @@ def count_objects(client: Client, class_name=WEAVIATE_CLASS_NAME):
 if __name__ == "__main__":
     client = connect_to_client(WEAVIATE_URL)
     create_schema(client)
-    ingest_data(client, 'scifact')
+    ingest_data(client, DATASET_NAME)
+    count_objects(client)

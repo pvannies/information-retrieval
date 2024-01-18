@@ -1,0 +1,32 @@
+{
+    "dataset": "scifact",
+    "embedding_model": "multilingual-e5-small",
+    "alpha": 1,
+    "bm25_properties": [
+        "text"
+    ],
+    "ndcg": {
+        "NDCG@1": 0.49,
+        "NDCG@2": 0.53565,
+        "NDCG@5": 0.57915,
+        "NDCG@10": 0.59584
+    },
+    "map": {
+        "MAP@1": 0.46444,
+        "MAP@2": 0.51297,
+        "MAP@5": 0.54518,
+        "MAP@10": 0.55329
+    },
+    "recall": {
+        "Recall@1": 0.46444,
+        "Recall@2": 0.55789,
+        "Recall@5": 0.66044,
+        "Recall@10": 0.70822
+    },
+    "precision": {
+        "P@1": 0.49,
+        "P@2": 0.29833,
+        "P@5": 0.14533,
+        "P@10": 0.07933
+    }
+}
