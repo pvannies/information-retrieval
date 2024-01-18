@@ -108,6 +108,7 @@ class GenericDataLoader:
     def _load_corpus(self):
 
         num_lines = sum(1 for i in open(self.corpus_file, 'rb'))
+
         with open(self.corpus_file, encoding='utf8') as fIn:
             for line in tqdm(fIn, total=num_lines):
                 line = json.loads(line)
@@ -125,19 +126,15 @@ class GenericDataLoader:
 
     def _load_qrels(self):
 
-        reader = csv.reader(open(self.qrels_file, encoding="utf-8"),
-                            delimiter="\t", quoting=csv.QUOTE_MINIMAL)
-        next(reader)
+        with open(self.qrels_file, encoding="utf-8") as f:
+            reader = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
 
-        for id, row in enumerate(reader):
-            query_id, corpus_id, score = row[0], row[1], int(row[2])
+            next(reader)
 
-            if query_id not in self.qrels:
-                self.qrels[query_id] = {corpus_id: score}
-            else:
-                self.qrels[query_id][corpus_id] = score
+            for id, row in enumerate(reader):
+                query_id, corpus_id, score = row[0], row[1], int(row[2])
 
-
-data_path = "datasets/scifact"
-corpus, queries, qrels = GenericDataLoader(data_path).load(split="test") # or split = "train" or "dev"
-print(len(corpus))
+                if query_id not in self.qrels:
+                    self.qrels[query_id] = {corpus_id: score}
+                else:
+                    self.qrels[query_id][corpus_id] = score
