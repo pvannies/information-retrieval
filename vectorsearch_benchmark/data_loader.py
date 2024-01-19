@@ -107,7 +107,8 @@ class GenericDataLoader:
 
     def _load_corpus(self):
 
-        num_lines = sum(1 for i in open(self.corpus_file, 'rb'))
+        with open(self.corpus_file, 'rb') as myfile:
+            num_lines = sum(1 for i in myfile)
 
         with open(self.corpus_file, encoding='utf8') as fIn:
             for line in tqdm(fIn, total=num_lines):
