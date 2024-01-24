@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # What other properties could be interesting to alter?
-ALPHA = 1
+ALPHA = 0.75
 BM25_PROPERTIES = ["text"]
 EMBEDDING_MODEL = 'multilingual-e5-small'
 LIMIT_RESULTS = 20

@@ -1,8 +1,13 @@
-# Information Retrieval, vector search and its benchmarks
+# Information retrieval, embedding models, vector search and its benchmarks
 
-Welcome to the repository!
+![img.png](img.png)
 
+Welcome to the repository for this techathon about **information retrieval**:
+*finding documents of text that satisfies the information need from within a large collection.*
 
+The first step in information retrieval is to convert the unstructured text in a vector representation that allows optimized search techniques. This is done with an embedding model. Which embedding models are out there and how to decide which one to use for your application? How are embedding models compared? We will investigate and gain an understanding of text embedding benchmarks, the datasets, tasks and metrics involved. We will set up a local vector database, weaviate, and try to reproduce the benchmark process with an embedding model of your choice (from huggingface). Here we will explore the different settings for vector search available in weaviate. Finally, we will discuss how to setup an evaluation for your own use case.
+
+We will learn about embedding models, benchmarks,  vector databases and search by finding answers to the questions defined below. Good luck!
 
 ## The Questions
 
@@ -12,7 +17,7 @@ Welcome to the repository!
 - On what properties do the embedding models differ?
 - Which embedding model would you like to test and why?
 
-### Comparison of embedding models 
+### Comparison of embedding models
 - On which tasks are embedding models compared?
 - What is the difference between reranking and retrieval tasks?
 - What are the different datasets used for the retrieval tasks, its different properties?
