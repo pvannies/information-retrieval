@@ -8,16 +8,16 @@ from weaviate import Client
 from typing import List, Dict, Tuple
 from ingestion import connect_to_client, DATASET_NAME, WEAVIATE_CLASS_NAME, WEAVIATE_URL
 from data_loader import GenericDataLoader
+from util import time_it
 
-
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # What other properties could be interesting to alter?
-ALPHA = 1
+ALPHA = 0.75
 BM25_PROPERTIES = ["text"]
 EMBEDDING_MODEL = 'multilingual-e5-small'
-LIMIT_RESULTS = 10
-
+LIMIT_RESULTS = 20
 
 # https://weaviate.io/developers/weaviate/search/hybrid
 # Use the alpha argument to change how much each search affects the results.
@@ -29,12 +29,11 @@ LIMIT_RESULTS = 10
 def query_and_retrieve_results(
         client: Client,
         query: str,
-        limit: int = 10,
+        limit: int = LIMIT_RESULTS,
         alpha: float = ALPHA,
         properties: list = BM25_PROPERTIES
 ) -> list:
     """Query the weaviate database and retrieve the results."""
-    logger.info(f'Query: {query}')
 
     answer = (
         client.query.get(
@@ -43,7 +42,7 @@ def query_and_retrieve_results(
         )
         .with_hybrid(query=query, properties=properties, alpha=alpha)
         .with_additional(["score"])
-        .with_limit(LIMIT_RESULTS)
+        .with_limit(limit)
         .do()
     )
     list_answers = answer["data"]["Get"][WEAVIATE_CLASS_NAME]
@@ -61,6 +60,7 @@ def convert_list_answers(list_answers: List[Dict]):
     return results
 
 
+@time_it
 def get_results_dataset(client: Client, queries: Dict[str, str]) -> Dict[str, Dict[str, float]]:
     results_dict = {}
     for query_id, query in queries.items():
@@ -131,9 +131,11 @@ def evaluate(qrels: Dict[str, Dict[str, int]],
 if __name__ == "__main__":
     # assumption: data is already in weaviate vector database
     client = connect_to_client(WEAVIATE_URL)
+
     data_path = f"./datasets/{DATASET_NAME}"
     dataset = data_path.split('/')[-1]
     _, queries, qrels = GenericDataLoader(data_path).load(split="test")  # or split = "train" or "dev"
+
     results = get_results_dataset(client, queries)
 
     ndcg, _map, recall, precision = evaluate(qrels, results, [1, 2, 5, 10])
@@ -149,7 +151,5 @@ if __name__ == "__main__":
 
     date = datetime.now().strftime('%d-%m-%Y-%H%M')
     filename = f"evaluation_metrics_{dataset}_{EMBEDDING_MODEL}_alpha={ALPHA}.json"
-    with open(os.path.join('output',filename), 'w') as myfile:
+    with open(os.path.join('output', filename), 'w') as myfile:
         json.dump(info_dict, myfile, indent=4)
-
-
