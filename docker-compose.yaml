@@ -4,8 +4,6 @@
 version: "3.8"
 services:
   t2v-transformers:
-    env_file:
-    - 'env.docker'
     build:
       args:
         - 'T2V_TRANSFORMERS_MODEL_NAME=${T2V_TRANSFORMERS_MODEL_NAME:-intfloat/multilingual-e5-small}'
@@ -16,8 +14,6 @@ services:
       ENABLE_CUDA: 0
 
   weaviate:
-    env_file:
-    - 'env.docker'
     command:
     - '--host'
     - '0.0.0.0'
