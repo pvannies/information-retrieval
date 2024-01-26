@@ -58,7 +58,7 @@ We will learn about embedding models, benchmarks,  vector databases and search b
 
 ## Prerequisites to run an evaluation locally
 
-* Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for your operating system. Request the docker desktop license here: https://ordina.4me.com/self-service
+* Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) for your operating system. No docker license needed, use is for educational purpose.
 * Run `docker-compose build` in the root of this repository (fast internet connection recommended for downloading the model).
 * Run `docker-compose up` in the root of this repository.
 
